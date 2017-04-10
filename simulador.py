@@ -14,6 +14,7 @@ class Simulador:
         # Medias das distribuicoes de chegadas e de atendimento no servico
         self.media_cheg = 1
         self.media_serv = 1.5
+
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
 
@@ -30,8 +31,8 @@ class Simulador:
         # Se nao for feito, o simulador nao tem eventos para simular
         self.insereEvento(eventos.Chegada(self.instant, self))
 
+    # Metodo executivo do simulador
     def executa(self):
-        """Metodo executivo do simulador"""
         # Enquanto nao atender todos os clientes
         while self.client_queue.atendidos < self.n_clientes:
             print(self.event_list)  # Mostra lista de eventos - desnecessario; e apenas informativo
@@ -41,16 +42,16 @@ class Simulador:
             event.executa(self.client_queue)  # Executa evento
         self.relat()  # Apresenta resultados de simulacao finais
 
+    # Metodo que actualiza os valores estatisticos do simulador
     def act_stats(self):
-        """Metodo que actualiza os valores estatisticos do simulador"""
         self.client_queue.act_stats()
 
+    # Metodo que apresenta os resultados de simulacao finais
     def relat(self):
-        """Metodo que apresenta os resultados de simulacao finais"""
         print("\n\n------------FINAL RESULTS---------------\n\n")
         self.client_queue.relat()
 
 
-# Main
-s = Simulador()
-s.executa()
+if __name__ == '__main__':
+    s = Simulador()
+    s.executa()

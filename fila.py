@@ -16,16 +16,16 @@ class Fila:
         self.soma_temp_esp = 0
         self.soma_temp_serv = 0
 
+    # Metodo que insere cliente no serviço
     def insereClient(self, client):
-        """Metodo que insere cliente (client) no servico"""
         if self.estado == 0:  # Se servico livre,
             self.estado += 1  # fica ocupado e agenda saida do cliente c para daqui a self.simulator.media_serv instantes
             self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator))
         else:
             self.fila.append(client)  # Se servico ocupado, o cliente vai para a fila de espera
 
+    # Metodo que remove cliente do serviço
     def removeClient(self):
-        """Metodo que remove cliente do servico"""
         self.atendidos += 1  # Regista que acabou de atender + 1 cliente
         if not self.fila:  # Se a fila esta vazia,
             self.estado -= 1  # liberta o servico
@@ -35,8 +35,8 @@ class Fila:
             # agenda a sua saida para daqui a self.simulator.media_serv instantes
             self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator))
 
+    # Metodo que calcula valores para estatisticas, em cada passo da simulacao ou evento
     def act_stats(self):
-        """Metodo que calcula valores para estatisticas, em cada passo da simulacao ou evento"""
         # Calcula tempo que passou desde o ultimo evento
         temp_desd_ult = self.simulator.instant - self.temp_last
         # Actualiza variavel para o proximo passo/evento
@@ -47,8 +47,8 @@ class Fila:
         # Contabiliza tempo de atendimento
         self.soma_temp_serv += (self.estado * temp_desd_ult)
 
+    # Metodo que calcula valores finais estatisticos
     def relat(self):
-        """Metodo que calcula valores finais estatisticos"""
         # Tempo medio de espera na fila
         temp_med_fila = self.soma_temp_esp / (self.atendidos+len(self.fila))
         # Comprimento medio da fila de espera
