@@ -42,7 +42,7 @@ class Chegada(Evento):
         fila.insereClient(cliente.Client())
 
         # Agenda nova chegada para daqui a aleatorio.exponencial(self.simulator.media_cheg) instantes
-        self.simulator.insereEvento(Chegada(self.simulator.instant + aleatorio.exponencial(self.simulator.media_cheg), self.simulator))
+        self.simulator.insereEvento(Chegada(self.simulator.instant + aleatorio.exponencial(fila.media_cheg), self.simulator))
 
 
 # Classe que representa a saida de um cliente. Deriva de Evento

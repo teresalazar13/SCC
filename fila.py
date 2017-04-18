@@ -7,21 +7,24 @@ import eventos
 class Fila:
 
     # Construtor
-    def __init__(self, sim, numero_de_maquinas):
+    def __init__(self, sim, numero_de_maquinas, media_cheg, media_serv, desvio_padrao):
         self.fila = []  # Fila de espera do servico
-        self.simulator = sim  # #Referencia para o simulador a que pertence o servico
+        self.simulator = sim  # Referencia para o simulador a que pertence o servico
         self.estado = 0  # Variavel que regista o estado do servico: 0 - livre; 1 - ocupado
-        self.temp_last = sim.instant  # Tempo que passou desde o ultimo evento. Neste caso 0, porque a simulacao ainda nao comecou.
+        self.temp_last = sim.instant  # Tempo que passou desde o ultimo evento. Neste caso 0, pq a sim ainda nao comecou
         self.atendidos = 0  # Numero de clientes atendidos ate ao momento
         self.soma_temp_esp = 0
         self.soma_temp_serv = 0
         self.numero_de_maquinas = numero_de_maquinas
+        self.media_cheg = media_cheg
+        self.media_serv = media_serv
+        self.desvio_padrao = desvio_padrao
 
     # Metodo que insere cliente no serviço
     def insereClient(self, client):
         if self.estado < self.numero_de_maquinas:  # Se servico livre(se estado menor que numero de atendedores)
-            self.estado += 1  # fica ocupado e agenda saida do cliente c para daqui a self.simulator.media_serv instantes
-            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator))
+            self.estado += 1  # Fica ocupado e agenda saida do cliente para daqui a self.simulator.media_serv instantes
+            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.media_serv, self.simulator))
         else:
             self.fila.append(client)  # Se servico ocupado, o cliente vai para a fila de espera
 
@@ -51,7 +54,7 @@ class Fila:
     # Metodo que calcula valores finais estatisticos
     def relat(self):
         # Tempo medio de espera na fila
-        temp_med_fila = self.soma_temp_esp / (self.atendidos+len(self.fila))
+        temp_med_fila = self.soma_temp_esp / (self.atendidos + len(self.fila))
         # Comprimento medio da fila de espera
         # self.simulator.instant neste momento e o valor do tempo de simulacao,
         # uma vez que a simulacao comecou em 0 e este metodo so e chamado no fim da simulacao

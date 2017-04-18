@@ -20,10 +20,18 @@ class Simulador:
         # Medias das distribuicoes de chegadas e de atendimento no servico
         media_cheg_A = 5
         media_cheg_B = 1.33
-        media_serv_A = 1.5
-        media_serv_B = 2.5
-        self.media_serv = 5
-        self.media_cheg = 4
+        media_serv_perfuracao_A = 1.5
+        media_serv_polimento_A = 1.5
+        media_serv_perfuracao_B = 1.5
+        media_serv_polimento_B = 1.5
+        media_serv_envernizamento = 1.5
+
+        # Desvios-padrao
+        desvio_padrao_perfuracao_A = 1.5
+        desvio_padrao_polimento_A = 1.5
+        desvio_padrao_perfuracao_B = 1.5
+        desvio_padrao_polimento_B = 1.5
+        desvio_padrao_envernizamento = 1.5
 
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
@@ -32,11 +40,11 @@ class Simulador:
         self.instant = 0  # valor inicial a zero
 
         # Servico - pode haver mais do que um num simulador
-        self.client_queue_perfuracao_A = fila.Fila(self, 1)  # So manda media de servico e o desvio - 2, 0.7 ...
-        self.client_queue_polimento_A = fila.Fila(self, 1)
-        self.client_queue_perfuracao_B = fila.Fila(self, 1)
-        self.client_queue_polimento_B = fila.Fila(self, 2)
-        self.client_queue_envernizamento = fila.Fila(self, 2)
+        self.client_queue_perfuracao_A = fila.Fila(self, 1, media_cheg_A, media_serv_perfuracao_A, desvio_padrao_perfuracao_A)
+        self.client_queue_polimento_A = fila.Fila(self, 1, media_cheg_A, media_serv_polimento_A, desvio_padrao_polimento_A)
+        self.client_queue_perfuracao_B = fila.Fila(self, 1, media_cheg_B, media_serv_perfuracao_B, desvio_padrao_perfuracao_B)
+        self.client_queue_polimento_B = fila.Fila(self, 2, media_cheg_B, media_serv_polimento_B, desvio_padrao_polimento_B)
+        self.client_queue_envernizamento = fila.Fila(self, 2, (media_cheg_A + media_cheg_B) / 2, media_serv_envernizamento, desvio_padrao_envernizamento)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
