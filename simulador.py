@@ -5,7 +5,7 @@ import lista
 import eventos
 
 
-# TODO - Distinguir entre os vários serviços, com filas de espera separadas e tempos de esperaatendimento diferentes
+# TODO - Distinguir entre os vários serviços, com filas de espera separadas e tempos de atendimento diferentes ---
 # TODO - Distinguir entre cliente A e B, que já foi perfurado ou polido e nao criar clientes ao calhas
 # TODO - Neste momento, o evento de Saida tira o cliente da simulação, nós queremos que este vá para o próximo serviço
 # TODO - O nr número de máquinas, tp de atendimentos e variação em cada serviço deve ser introduzido num interface graf
@@ -15,11 +15,15 @@ class Simulador:
 
     def __init__(self):
         # Tempo de execucao. Simulador para quando instant < execution_time
-        self.execution_time = 10000
+        self.execution_time = 1
 
         # Medias das distribuicoes de chegadas e de atendimento no servico
-        self.media_cheg = 1
-        self.media_serv = 1.5
+        media_cheg_A = 5
+        media_cheg_B = 1.33
+        media_serv_A = 1.5
+        media_serv_B = 2.5
+        self.media_serv = 5
+        self.media_cheg = 4
 
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
@@ -28,7 +32,11 @@ class Simulador:
         self.instant = 0  # valor inicial a zero
 
         # Servico - pode haver mais do que um num simulador
-        self.client_queue = fila.Fila(self)
+        self.client_queue_perfuracao_A = fila.Fila(self, 1)  # So manda media de servico e o desvio - 2, 0.7 ...
+        self.client_queue_polimento_A = fila.Fila(self, 1)
+        self.client_queue_perfuracao_B = fila.Fila(self, 1)
+        self.client_queue_polimento_B = fila.Fila(self, 2)
+        self.client_queue_envernizamento = fila.Fila(self, 2)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
@@ -42,23 +50,46 @@ class Simulador:
     # Metodo executivo do simulador
     def executa(self):
         # Enquanto nao atender todos os clientes
-        # TODO -> -> deve ser mudado para enquanto o tempo nao tive passado
+        # TODO - deve ser mudado para enquanto o tempo nao tive passado (done)
         while self.instant < self.execution_time:
-            print(self.event_list)  # Mostra lista de eventos - desnecessario; e apenas informativo
+            # print(self.event_list)  # Mostra lista de eventos - desnecessario; e apenas informativo
             event = self.event_list.remove_event()  # Retira primeiro evento (e o mais iminente) da lista de eventos
             self.instant = event.instant  # Actualiza relogio de simulacao
             self.act_stats()  # Actualiza valores estatisticos
-            event.executa(self.client_queue)  # Executa evento
+
+            # Executa eventos
+            event.executa(self.client_queue_perfuracao_A)
+            event.executa(self.client_queue_polimento_A)
+            event.executa(self.client_queue_perfuracao_B)
+            event.executa(self.client_queue_polimento_B)
+            event.executa(self.client_queue_envernizamento)
         self.relat()  # Apresenta resultados de simulacao finais
 
     # Metodo que actualiza os valores estatisticos do simulador
     def act_stats(self):
-        self.client_queue.act_stats()
+        # print("\n\n------------STATS - PERFURACAO A---------------\n\n")
+        self.client_queue_perfuracao_A.act_stats()
+        # print("\n\n------------STATS - POLIMENTO A---------------\n\n")
+        self.client_queue_polimento_A.act_stats()
+        # print("\n\n------------STATS - PERFURACAO B---------------\n\n")
+        self.client_queue_perfuracao_B.act_stats()
+        # print("\n\n------------STATS - POLIMENTO B---------------\n\n")
+        self.client_queue_polimento_B.act_stats()
+        # print("\n\n------------STATS - ENVERNIZAMENTO---------------\n\n")
+        self.client_queue_envernizamento.act_stats()
 
     # Metodo que apresenta os resultados de simulacao finais
     def relat(self):
-        print("\n\n------------FINAL RESULTS---------------\n\n")
-        self.client_queue.relat()
+        print("\n\n------------FINAL RESULTS - PERFURACAO A---------------\n\n")
+        self.client_queue_perfuracao_A.relat()
+        print("\n\n------------FINAL RESULTS - POLIMENTO A---------------\n\n")
+        self.client_queue_polimento_A.relat()
+        print("\n\n------------FINAL RESULTS - PERFURACAO B---------------\n\n")
+        self.client_queue_perfuracao_B.relat()
+        print("\n\n------------FINAL RESULTS - POLIMENTO B---------------\n\n")
+        self.client_queue_polimento_B.relat()
+        print("\n\n------------FINAL RESULTS - ENVERNIZAMENTO---------------\n\n")
+        self.client_queue_envernizamento.relat()
 
 
 if __name__ == '__main__':

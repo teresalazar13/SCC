@@ -7,7 +7,7 @@ import eventos
 class Fila:
 
     # Construtor
-    def __init__(self, sim):
+    def __init__(self, sim, numero_de_maquinas):
         self.fila = []  # Fila de espera do servico
         self.simulator = sim  # #Referencia para o simulador a que pertence o servico
         self.estado = 0  # Variavel que regista o estado do servico: 0 - livre; 1 - ocupado
@@ -15,10 +15,11 @@ class Fila:
         self.atendidos = 0  # Numero de clientes atendidos ate ao momento
         self.soma_temp_esp = 0
         self.soma_temp_serv = 0
+        self.numero_de_maquinas = numero_de_maquinas
 
     # Metodo que insere cliente no serviço
     def insereClient(self, client):
-        if self.estado == 0:  # Se servico livre,
+        if self.estado < self.numero_de_maquinas:  # Se servico livre(se estado menor que numero de atendedores)
             self.estado += 1  # fica ocupado e agenda saida do cliente c para daqui a self.simulator.media_serv instantes
             self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator))
         else:
