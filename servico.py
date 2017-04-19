@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import eventos
+import cliente
 
 
 # Classe que representa um servico com uma fila de espera associada
-class Fila:
+class Servico:
 
     # Construtor + prox serviço (env e null) - na saida(insereClient precisa de saber para onde ir)
     def __init__(self, sim, numero_de_maquinas, media_serv, desvio_padrao, proximo_servico):
@@ -18,12 +19,13 @@ class Fila:
         self.numero_de_maquinas = numero_de_maquinas
         self.media_serv = media_serv
         self.desvio_padrao = desvio_padrao
+        self.proximo_servico = proximo_servico
 
     # Metodo que insere cliente no serviço
     def insereClient(self, client, tipo_servico):
         if self.estado < self.numero_de_maquinas:  # Se servico livre(se estado menor que numero de atendedores)
             self.estado += 1  # Fica ocupado e agenda saida do cliente para daqui a self.simulator.media_serv instantes
-            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.media_serv, self.simulator, tipo_servico))
+            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.media_serv, self.simulator, tipo_servico, client, self))
         else:
             self.fila.append(client)  # Se servico ocupado, o cliente vai para a fila de espera
 
@@ -34,9 +36,8 @@ class Fila:
             self.estado -= 1  # liberta o servico
         else:
             # vai buscar proximo cliente a fila de espera
-            self.fila.pop(0)
             # agenda a sua saida para daqui a self.simulator.media_serv instantes
-            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator, tipo_servico))
+            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.media_serv, self.simulator, tipo_servico, self.fila.pop(0), self))
 
     # Metodo que calcula valores para estatisticas, em cada passo da simulacao ou evento
     def act_stats(self):
@@ -59,7 +60,7 @@ class Fila:
         # uma vez que a simulacao comecou em 0 e este metodo so e chamado no fim da simulacao
         comp_med_fila = self.soma_temp_esp / self.simulator.instant
         # Tempo medio de atendimento no servico
-        utilizacao_serv = self.soma_temp_serv / self.simulator.instant
+        utilizacao_serv = (self.soma_temp_serv / self.simulator.instant) / self.numero_de_maquinas
 
         # Apresenta resultados
         print("Tempo medio de espera", temp_med_fila)

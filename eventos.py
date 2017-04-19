@@ -2,16 +2,17 @@
 # encoding: utf-8
 import cliente
 import aleatorio
+import servico
 
 
 # Classe de onde vao ser derivados todos os eventos. Contem apenas os atributos e metodos comuns a todos os eventos.
 # Nao havera instancias desta classe num simulador
 class Evento:
 
-    def __init__(self, i, sim, tipo_servico):
+    def __init__(self, i, sim, servico):
         self.instant = i  # Instante de ocorrencia do evento
         self.simulator = sim  # Simulador onde ocorre o evento
-        self.tipo_servico = tipo_servico
+        self.servico = servico
 
     # Metodo de comparacao entre dois eventos.
     # Determina se o evento corrente ocorre primeiro, ou nao, do que o evento e1
@@ -29,8 +30,8 @@ class Evento:
 # Classe que representa a chegada de um cliente. Deriva de Evento
 class Chegada(Evento):
 
-    def __init__(self, i, sim, media_cheg, tipo_servico):
-        Evento.__init__(self, i, sim, tipo_servico)
+    def __init__(self, i, sim, media_cheg, servico):
+        Evento.__init__(self, i, sim, servico)
         self.media_cheg = media_cheg
 
     # Metodo que descreve o evento. Para ser usado na listagem da lista de eventos.
@@ -38,27 +39,30 @@ class Chegada(Evento):
         return "Chegada\t[" + str(self.instant) + "]"
 
     # Metodo que executa as acoes correspondentes a chegada de um cliente
-    def executa(self, fila):
-        if not self.tipo_servico:
-            # Agenda nova chegada para daqui a aleatorio.exponencial(self.simulator.media_cheg) instantes
-            self.simulator.insereEvento(Chegada(self.simulator.instant + aleatorio.exponencial(self.media_cheg), self.simulator, self.media_cheg, None))
-            # Coloca cliente no servico - na fila ou a ser atendido, conforme o caso
-            fila.insereClient(cliente.Client(), None)
-        else:
-            # Coloca cliente no servico - na fila ou a ser atendido, conforme o caso
-            fila.insereClient(cliente.Client(), self.tipo_servico)
+    def executa(self):
+        # Coloca cliente no servico - na fila ou a ser atendido, conforme o caso
+        self.servico.insereClient(cliente.Client(), self.servico.proximo_servico)
+        # Agenda nova chegada para daqui a aleatorio.exponencial(self.simulator.media_cheg) instantes
+        self.simulator.insereEvento(Chegada(self.simulator.instant + aleatorio.exponencial(self.media_cheg), self.simulator, self.media_cheg, self.servico))
 
 # Classe que representa a saida de um cliente. Deriva de Evento
 class Saida(Evento):
 
-    def __init__(self, i, sim, tipo_servico):
-        Evento.__init__(self, i, sim, tipo_servico)
+    def __init__(self, i, sim, tipo_servico, client, servico):
+        Evento.__init__(self, i, sim, servico)
+        self.tipo_servico = tipo_servico
+        self.client = client
 
     # Metodo que descreve o evento. Para ser usado na listagem da lista de eventos.
     def __str__(self):
         return "Saida\t\t[" + str(self.instant) + "]"
 
     # Metodo que executa as acoees correspondentes a saida de um cliente
-    def executa(self, fila):
-        fila.removeClient(self.tipo_servico)  # Retira cliente do servico
+    def executa(self):
+        if not self.servico.proximo_servico:
+            self.servico.removeClient(self.tipo_servico)  # Retira cliente do servico
+        else:
+            self.servico.removeClient(self.tipo_servico)  # Retira cliente do servico
+            self.servico.proximo_servico.insereClient(self.client, self.tipo_servico)
+
 
