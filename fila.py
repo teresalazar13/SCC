@@ -6,8 +6,8 @@ import eventos
 # Classe que representa um servico com uma fila de espera associada
 class Fila:
 
-    # Construtor
-    def __init__(self, sim, numero_de_maquinas, media_cheg, media_serv, desvio_padrao):
+    # Construtor + prox serviço (env e null) - na saida(insereClient precisa de saber para onde ir)
+    def __init__(self, sim, numero_de_maquinas, media_serv, desvio_padrao, proximo_servico):
         self.fila = []  # Fila de espera do servico
         self.simulator = sim  # Referencia para o simulador a que pertence o servico
         self.estado = 0  # Variavel que regista o estado do servico: 0 - livre; 1 - ocupado
@@ -16,20 +16,19 @@ class Fila:
         self.soma_temp_esp = 0
         self.soma_temp_serv = 0
         self.numero_de_maquinas = numero_de_maquinas
-        self.media_cheg = media_cheg
         self.media_serv = media_serv
         self.desvio_padrao = desvio_padrao
 
     # Metodo que insere cliente no serviço
-    def insereClient(self, client):
+    def insereClient(self, client, tipo_servico):
         if self.estado < self.numero_de_maquinas:  # Se servico livre(se estado menor que numero de atendedores)
             self.estado += 1  # Fica ocupado e agenda saida do cliente para daqui a self.simulator.media_serv instantes
-            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.media_serv, self.simulator))
+            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.media_serv, self.simulator, tipo_servico))
         else:
             self.fila.append(client)  # Se servico ocupado, o cliente vai para a fila de espera
 
     # Metodo que remove cliente do serviço
-    def removeClient(self):
+    def removeClient(self, tipo_servico):
         self.atendidos += 1  # Regista que acabou de atender + 1 cliente
         if not self.fila:  # Se a fila esta vazia,
             self.estado -= 1  # liberta o servico
@@ -37,7 +36,7 @@ class Fila:
             # vai buscar proximo cliente a fila de espera
             self.fila.pop(0)
             # agenda a sua saida para daqui a self.simulator.media_serv instantes
-            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator))
+            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + self.simulator.media_serv, self.simulator, tipo_servico))
 
     # Metodo que calcula valores para estatisticas, em cada passo da simulacao ou evento
     def act_stats(self):

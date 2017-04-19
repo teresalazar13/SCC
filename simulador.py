@@ -5,10 +5,11 @@ import lista
 import eventos
 
 
-# TODO - Distinguir entre os vários serviços, com filas de espera separadas e tempos de atendimento diferentes ---
+# TODO - Distinguir entre os vários serviços, com filas de espera separadas e tempos de atendimento diferentes --
 # TODO - Distinguir entre cliente A e B, que já foi perfurado ou polido e nao criar clientes ao calhas
-# TODO - Neste momento, o evento de Saida tira o cliente da simulação, nós queremos que este vá para o próximo serviço
-# TODO - O nr número de máquinas, tp de atendimentos e variação em cada serviço deve ser introduzido num interface graf
+# TODO - Neste momento, o evento de Saida tira o cliente da simulação, nós queremos que este vá para o próximo serviço --
+# TODO - Adicionar numero de maquinas --
+# TODO - O nr número de máquinas, tp de atendimentos e variação em cada serviço numa interface grafica
 
 
 class Simulador:
@@ -39,18 +40,19 @@ class Simulador:
         # Relogio de simulacao - variavel que contem o valor do tempo em cada instante
         self.instant = 0  # valor inicial a zero
 
-        # Servico - pode haver mais do que um num simulador
-        self.client_queue_perfuracao_A = fila.Fila(self, 1, media_cheg_A, media_serv_perfuracao_A, desvio_padrao_perfuracao_A)
-        self.client_queue_polimento_A = fila.Fila(self, 1, media_cheg_A, media_serv_polimento_A, desvio_padrao_polimento_A)
-        self.client_queue_perfuracao_B = fila.Fila(self, 1, media_cheg_B, media_serv_perfuracao_B, desvio_padrao_perfuracao_B)
-        self.client_queue_polimento_B = fila.Fila(self, 2, media_cheg_B, media_serv_polimento_B, desvio_padrao_polimento_B)
-        self.client_queue_envernizamento = fila.Fila(self, 2, (media_cheg_A + media_cheg_B) / 2, media_serv_envernizamento, desvio_padrao_envernizamento)
+        # Servicos
+        self.client_queue_envernizamento = fila.Fila(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None)
+        self.client_queue_polimento_B = fila.Fila(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento)
+        self.client_queue_perfuracao_B = fila.Fila(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B)
+        self.client_queue_polimento_A = fila.Fila(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento)
+        self.client_queue_perfuracao_A = fila.Fila(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
 
         # Agendamento da primeira chegada. Se nao for feito, o simulador nao tem eventos para simular
-        self.insereEvento(eventos.Chegada(self.instant, self))
+        self.insereEvento(eventos.Chegada(self.instant, self, media_cheg_A, None))
+        self.insereEvento(eventos.Chegada(self.instant, self, media_cheg_B, None))
 
     def insereEvento(self, event):
         self.event_list.insert_event(event)
