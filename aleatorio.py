@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import random
+import randomGenerator
 import math
 
 # Classe para geracao de numeros aleatorios segundos varias distribuicoes
@@ -10,6 +10,5 @@ import math
 
 
 def exponencial(media):
-    return -media * math.log(random.random())
+    return -media * math.log(randomGenerator.rand(10))
 
-# print Aleatorio().exponencial(2) #test
