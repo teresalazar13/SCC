@@ -6,6 +6,7 @@ import eventos
 
 
 # TODO -> VERIFICAR SEEDS
+# TODO -> VERIFICAR QUANDO USAR DISTRIBUICAO NORMAL OU DISTRIBUICAO EXPONENCIAL NEGATIVA
 
 class Simulador:
 
@@ -23,11 +24,11 @@ class Simulador:
         media_serv_envernizamento = 1.4
 
         # Desvios-padrao
-        desvio_padrao_perfuracao_A = 1.5
-        desvio_padrao_polimento_A = 1.5
-        desvio_padrao_perfuracao_B = 1.5
-        desvio_padrao_polimento_B = 1.5
-        desvio_padrao_envernizamento = 1.5
+        desvio_padrao_perfuracao_A = 0.7
+        desvio_padrao_polimento_A = 1.2
+        desvio_padrao_perfuracao_B = 0.3
+        desvio_padrao_polimento_B = 1
+        desvio_padrao_envernizamento = 0.3
 
         seed = 10
 
@@ -63,8 +64,7 @@ class Simulador:
             event = self.event_list.remove_event()  # Retira primeiro evento (e o mais iminente) da lista de eventos
             self.instant = event.instant  # Actualiza relogio de simulacao
             self.act_stats()  # Actualiza valores estatisticos
-            # Executa eventos
-            event.executa()
+            event.executa()  # Executa eventos
         self.relat()  # Apresenta resultados de simulacao finais
 
     # Metodo que actualiza os valores estatisticos do simulador
