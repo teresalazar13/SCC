@@ -5,12 +5,8 @@ import lista
 import eventos
 
 
-# TODO - Distinguir entre os vários serviços, com filas de espera separadas e tempos de atendimento diferentes --
-# TODO - Distinguir entre cliente A e B, que já foi perfurado ou polido e nao criar clientes ao calhas --
-# TODO - Neste momento, o evento de Saida tira o cliente da simulação, nós queremos que este vá para o próximo serviço --
-# TODO - Adicionar numero de maquinas --
-# TODO - O nr número de máquinas, tp de atendimentos e variação em cada serviço numa interface grafica
-
+# TODO -> VERIFICAR SEEDS
+# TODO -> VERIFICAR QUANDO USAR DISTRIBUICAO NORMAL OU DISTRIBUICAO EXPONENCIAL NEGATIVA
 
 class Simulador:
 
@@ -28,11 +24,13 @@ class Simulador:
         media_serv_envernizamento = 1.4
 
         # Desvios-padrao
-        desvio_padrao_perfuracao_A = 1.5
-        desvio_padrao_polimento_A = 1.5
-        desvio_padrao_perfuracao_B = 1.5
-        desvio_padrao_polimento_B = 1.5
-        desvio_padrao_envernizamento = 1.5
+        desvio_padrao_perfuracao_A = 0.7
+        desvio_padrao_polimento_A = 1.2
+        desvio_padrao_perfuracao_B = 0.3
+        desvio_padrao_polimento_B = 1
+        desvio_padrao_envernizamento = 0.3
+
+        seed = 10
 
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
@@ -41,11 +39,11 @@ class Simulador:
         self.instant = 0  # valor inicial a zero
 
         # Servicos
-        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None)
-        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento)
-        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B)
-        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento)
-        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A)
+        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None, seed)
+        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento, seed)
+        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B, seed)
+        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento, seed)
+        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A, seed)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
@@ -66,9 +64,7 @@ class Simulador:
             event = self.event_list.remove_event()  # Retira primeiro evento (e o mais iminente) da lista de eventos
             self.instant = event.instant  # Actualiza relogio de simulacao
             self.act_stats()  # Actualiza valores estatisticos
-
-            # Executa eventos
-            event.executa()
+            event.executa()  # Executa eventos
         self.relat()  # Apresenta resultados de simulacao finais
 
     # Metodo que actualiza os valores estatisticos do simulador
