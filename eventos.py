@@ -42,7 +42,6 @@ class Chegada(Evento):
         # Coloca cliente no servico - na fila ou a ser atendido, conforme o caso
         self.servico.insereClient(cliente.Client(), self.servico.proximo_servico)
         # Agenda nova chegada para daqui a aleatorio.exponencial(self.simulator.media_cheg) instantes
-        # TODO -> METER O S
         self.simulator.insereEvento(Chegada(self.simulator.instant + Aleatorio.exponencial(self.media_cheg, 10), self.simulator, self.media_cheg, self.servico))
 
 # Classe que representa a saida de um cliente. Deriva de Evento

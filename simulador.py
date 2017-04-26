@@ -5,6 +5,8 @@ import lista
 import eventos
 
 
+# TODO -> VERIFICAR SEEDS
+
 class Simulador:
 
     def __init__(self):
@@ -27,6 +29,8 @@ class Simulador:
         desvio_padrao_polimento_B = 1.5
         desvio_padrao_envernizamento = 1.5
 
+        seed = 10
+
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
 
@@ -34,11 +38,11 @@ class Simulador:
         self.instant = 0  # valor inicial a zero
 
         # Servicos
-        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None)
-        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento)
-        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B)
-        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento)
-        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A)
+        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None, seed)
+        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento, seed)
+        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B, seed)
+        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento, seed)
+        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A, seed)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
@@ -59,7 +63,6 @@ class Simulador:
             event = self.event_list.remove_event()  # Retira primeiro evento (e o mais iminente) da lista de eventos
             self.instant = event.instant  # Actualiza relogio de simulacao
             self.act_stats()  # Actualiza valores estatisticos
-
             # Executa eventos
             event.executa()
         self.relat()  # Apresenta resultados de simulacao finais
