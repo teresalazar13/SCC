@@ -44,29 +44,32 @@ mult1 = 24112
 mult2 = 26143
 
 
-# Generate the next random number
-def rand(stream):
-    zi = zrng[stream]
-    lowprd = (zi & 65535) * mult1
-    hi = (zi >> 16) * mult1 + (lowprd >> 16)
-    zi = ((lowprd & 65535) - modlus) + ((hi & 32767) << 16) + (hi >> 15)
-    if zi < 0:
-        zi += modlus
-    lowprd = (zi & 65535) * mult2
-    hi = (zi >> 16) * mult2 + (lowprd >> 16)
-    zi = ((lowprd & 65535) - modlus) + ((hi & 32767) << 16) + (hi >> 15)
-    if zi < 0:
-        zi += modlus
-    zrng[stream] = zi
+class RandomGenerator:
 
-    return ((zi >> 7 | 1) + 1) / 16777216.0
+    # Generate the next random number
+    @staticmethod
+    def rand(stream):
+        zi = zrng[stream]
+        lowprd = (zi & 65535) * mult1
+        hi = (zi >> 16) * mult1 + (lowprd >> 16)
+        zi = ((lowprd & 65535) - modlus) + ((hi & 32767) << 16) + (hi >> 15)
+        if zi < 0:
+            zi += modlus
+        lowprd = (zi & 65535) * mult2
+        hi = (zi >> 16) * mult2 + (lowprd >> 16)
+        zi = ((lowprd & 65535) - modlus) + ((hi & 32767) << 16) + (hi >> 15)
+        if zi < 0:
+            zi += modlus
+        zrng[stream] = zi
 
+        return ((zi >> 7 | 1) + 1) / 16777216.0
 
-# Set the current zrng for stream to zset
-def randst(zset, stream):
-    zrng[stream] = zset
+    @staticmethod
+    # Set the current zrng for stream to zset
+    def randst(zset, stream):
+        zrng[stream] = zset
 
-
-# Return the current zrng for stream
-def randgt(stream):
-    return zrng[stream]
+    @staticmethod
+    # Return the current zrng for stream
+    def randgt(stream):
+        return zrng[stream]

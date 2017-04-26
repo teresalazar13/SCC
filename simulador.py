@@ -5,13 +5,6 @@ import lista
 import eventos
 
 
-# TODO - Distinguir entre os vários serviços, com filas de espera separadas e tempos de atendimento diferentes --
-# TODO - Distinguir entre cliente A e B, que já foi perfurado ou polido e nao criar clientes ao calhas --
-# TODO - Neste momento, o evento de Saida tira o cliente da simulação, nós queremos que este vá para o próximo serviço --
-# TODO - Adicionar numero de maquinas --
-# TODO - O nr número de máquinas, tp de atendimentos e variação em cada serviço numa interface grafica
-
-
 class Simulador:
 
     def __init__(self):

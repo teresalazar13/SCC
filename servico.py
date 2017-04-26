@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import eventos
-import cliente
+
 
 
 # Classe que representa um servico com uma fila de espera associada
@@ -43,7 +43,7 @@ class Servico:
     def act_stats(self):
         # Calcula tempo que passou desde o ultimo evento
         temp_desd_ult = self.simulator.instant - self.temp_last
-        # Actualiza variavel para o proximo passo/evento
+        # Actualiza variavel para o proximo passo/eventosd
         self.temp_last = self.simulator.instant
         # Contabiliza tempo de espera na fila
         # para todos os clientes que estiveram na fila durante o intervalo
