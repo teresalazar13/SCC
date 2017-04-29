@@ -210,11 +210,19 @@ class MenuSimulator(tk.Frame):
             s = simulador.Simulador()
             if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_attendA.get() != '' and pol_mediaA.get() != '' and pol_attendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
                 s.client_queue_envernizamento = servico.Servico(s, 2, float(env_media.get()), float(env_desvio.get()), None, s.seed_envernizamento)
-                s.client_queue_polimento_B = servico.Servico(s, 2, float(pol_mediaB.get()), float(pol_desvioB.get()), s.client_queue_envernizamento, s.seed_polimento_Bo)
+                s.client_queue_polimento_B = servico.Servico(s, 2, float(pol_mediaB.get()), float(pol_desvioB.get()), s.client_queue_envernizamento, s.seed_polimento_B)
                 s.client_queue_perfuracao_B = servico.Servico(s, 2, float(perf_mediaB.get()), float(perf_desvioB.get()),s.client_queue_polimento_B, s.seed_perfuracao_B)
-                s.client_queue_polimentoA = servico.Servico(s, 1, float(pol_mediaA.get()), float(pol_desvioA.get()), s.client_queue_envernizamento, s.seed_polimento_A)
-                s.client_queue_perfuracaoA = servico.Servico(s, 1, float(perf_mediaA.get()), float(perf_desvioA.get()), s.client_queue_polimento_A, s.seed_perfuracao_A)
+                s.client_queue_polimento_A = servico.Servico(s, 1, float(pol_mediaA.get()), float(pol_desvioA.get()), s.client_queue_envernizamento, s.seed_polimento_A)
+                s.client_queue_perfuracao_A = servico.Servico(s, 1, float(perf_mediaA.get()), float(perf_desvioA.get()), s.client_queue_polimento_A, s.seed_perfuracao_A)
                 s.execution_time = float(temp_sim.get())
+
+                # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
+                s.event_list = lista.Lista(s)
+
+                # Agendamento da primeira chegada. Se nao for feito, o simulador nao tem eventos para simular
+                s.insereEvento(eventos.Chegada(s.instant, self, float(chegA.get()), s.client_queue_perfuracao_A))
+                s.insereEvento(eventos.Chegada(s.instant, self,float(chegB.get()), s.client_queue_perfuracao_B))
+
                 s.executa()
                 self.destroy()
 

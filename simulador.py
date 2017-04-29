@@ -42,11 +42,11 @@ class Simulador:
         self.instant = 0  # valor inicial a 0
 
         # Servicos
-        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None, seed_envernizamento)
-        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento, seed_polimento_B)
-        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B, seed_perfuracao_B)
-        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento, seed_polimento_A)
-        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A, seed_perfuracao_A)
+        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None, self.seed_envernizamento)
+        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento, self.seed_polimento_B)
+        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B, self.seed_perfuracao_B)
+        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento, self.seed_polimento_A)
+        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A, self.seed_perfuracao_A)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
