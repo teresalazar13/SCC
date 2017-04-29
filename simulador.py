@@ -29,11 +29,11 @@ class Simulador:
         desvio_padrao_envernizamento = 0.3
 
         # Seeds
-        seed_perfuracao_A = 10
-        seed_polimento_A = 20
-        seed_perfuracao_B = 30
-        seed_polimento_B = 40
-        seed_envernizamento = 50
+        self.seed_perfuracao_A = 10
+        self.seed_polimento_A = 20
+        self.seed_perfuracao_B = 30
+        self.seed_polimento_B = 40
+        self.seed_envernizamento = 50
 
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
