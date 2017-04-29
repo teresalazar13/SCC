@@ -22,6 +22,7 @@ class Servico:
         self.desvio_padrao = desvio_padrao
         self.proximo_servico = proximo_servico
         self.seed = seed
+        self.aux_rand = 0
 
     # Metodo que insere cliente no serviço
     def insereClient(self, client, tipo_servico):
@@ -38,7 +39,14 @@ class Servico:
             self.estado -= 1  # liberta o servico
         else:
             # vai buscar proximo cliente a fila de espera e agenda a sua saida
-            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + Aleatorio.normal(self.media_serv, self.desvio_padrao, self.seed)[0], self.simulator, tipo_servico, self.fila.pop(0), self))
+            if self.aux_rand == 0:
+                ran = Aleatorio.normal(self.media_serv, self.desvio_padrao, self.seed)
+                random_number = ran[0]
+                self.aux_rand = ran[1]
+            else:
+                random_number = self.aux_rand
+                self.aux_rand = 0
+            self.simulator.insereEvento(eventos.Saida(self.simulator.instant + random_number, self.simulator, tipo_servico, self.fila.pop(0), self))
 
     # Metodo que calcula valores para estatisticas, em cada passo da simulacao ou evento
     def act_stats(self):
