@@ -2,6 +2,7 @@
 # encoding: utf-8
 import eventos
 import cliente
+import simulador
 
 
 # Classe que representa um servico com uma fila de espera associada

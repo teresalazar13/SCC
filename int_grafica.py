@@ -1,4 +1,10 @@
 import tkinter as tk
+import simulador
+import lista
+import servico
+import cliente
+import eventos
+
 
 FONT = ("Verdana", 12)
 
@@ -41,23 +47,24 @@ class MenuStart(tk.Frame):
 
 
 class MenuSimulator(tk.Frame):
+
+    def validate(self, action, index, value_if_allowed, prior_value, text, validation_type, trigger_type, widget_name):
+        if value_if_allowed == '':
+            return True
+        elif text in '0123456789.-+':
+            try:
+                float(value_if_allowed)
+                return True
+            except ValueError:
+                return False
+        else:
+            return False
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Introduzir valores: ", font=FONT)
         label.pack()
 
-
-        def validate(self, action, index, value_if_allowed, prior_value, text, validation_type, trigger_type, widget_name):
-            if text in '0123456789.-+':
-                try:
-                    float(value_if_allowed)
-                    return True
-                except ValueError:
-                    return False
-            else:
-                return False
-
-        vcmd = (self.register(validate),'%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        vcmd = (self.register(self.validate), '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
 
         #Tempo de simulação
         label_sim = tk.Label(self, text = "Tempo de simulação: ")
@@ -65,6 +72,11 @@ class MenuSimulator(tk.Frame):
         label_sim.pack()
         temp_sim.pack()
         temp_sim.focus_set()
+
+        #Número de maquinas
+        label_temp = tk.Label(self, text = "Número de máquinas: ")
+        labem_temp = tk.Entry(self, validate="key", validatecommand = vcmd)
+
 
         #Média de Chegadas A
         label_chegA = tk.Label(self, text = "Média de chegadas A: ")
@@ -188,26 +200,22 @@ class MenuSimulator(tk.Frame):
         env_media.pack()
         env_media.focus_set()
 
-
-        button1 = tk.Button(self, text="SIMULAR", command=lambda: controller.show_frame(callback), width = 10)
+        button1 = tk.Button(self, text="SIMULAR", command= lambda:callback(), width = 10)
         button1.pack()
 
         button2 = tk.Button(self, text="MENU INICIAL", command=lambda: controller.show_frame(MenuStart), width = 10)
         button2.pack()
 
-
-#class MenuExit(tk.Frame):
-    #def __init__(self, parent, controller):
-        #tk.Frame.__init__(self, parent)
-        #label = tk.Label(self, text="Page Two!!!", font=FONT)
-        #label.pack(pady=10, padx=10)
-
-        #button1 = tk.Button(self, text="Back to Home", command=lambda: controller.show_frame(MenuSimulator))
-        #button1.pack()
-
-        #button2 = tk.Button(self, text="Page One", command=lambda: controller.show_frame(MenuStart))
-        #button2.pack()
-
-
-run = Menu()
-run.mainloop()
+        def callback():
+            s = simulador.Simulador()
+            if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_attendA.get() != '' and pol_mediaA.get() != '' and pol_attendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
+                s.client_queue_envernizamento = servico.Servico(s, 2, float(env_media.get()), float(env_desvio.get()), None)
+                s.client_queue_polimento_B = servico.Servico(s, 2, float(pol_mediaB.get()), float(pol_desvioB.get()), s.client_queue_envernizamento)
+                s.client_queue_perfuracao_B = servico.Servico(s, 2, float(perf_mediaB.get()), float(perf_desvioB.get()),s.client_queue_polimento_B)
+                s.client_queue_polimentoA = servico.Servico(s, 1, float(pol_mediaA.get()), float(pol_desvioA.get()), s.client_queue_envernizamento)
+                s.client_queue_perfuracaoA = servico.Servico(s, 1, float(perf_mediaA.get()), float(perf_desvioA.get()), s.client_queue_polimento_A)
+                s.execution_time = float(temp_sim.get())
+                s.executa()
+                self.destroy()
+app = Menu()
+app.mainloop()
