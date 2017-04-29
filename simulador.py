@@ -3,18 +3,22 @@
 import servico
 import lista
 import eventos
+import int_grafica
 
 # TODO -> VERIFICAR QUANDO USAR DISTRIBUICAO NORMAL OU DISTRIBUICAO EXPONENCIAL NEGATIVA
 
 class Simulador:
 
-    def __init__(self):
+    def __init__(self, execution_time, media_cheg_A, media_cheg_B,
+                 media_serv_envernizamento, desvio_padrao_envernizamento, numero_de_maquinas_envernizamento,
+                 media_serv_polimento_B, desvio_padrao_polimento_B, numero_de_maquinas_polimento_B,
+                 media_serv_perfuracao_B, desvio_padrao_perfuracao_B, numero_de_maquinas_perfuracao_B,
+                 media_serv_polimento_A, desvio_padrao_polimento_A, numero_de_maquinas_polimento_A,
+                 media_serv_perfuracao_A, desvio_padrao_perfuracao_A, numero_de_maquinas_perfuracao_A):
         # Tempo de execucao
-        self.execution_time = 480
-
+        self.execution_time = execution_time
+        """
         # Medias das distribuicoes de chegadas e de atendimento no servico
-        media_cheg_A = 5
-        media_cheg_B = 1.33
         media_serv_perfuracao_A = 2
         media_serv_polimento_A = 4
         media_serv_perfuracao_B = 0.75
@@ -26,14 +30,14 @@ class Simulador:
         desvio_padrao_polimento_A = 1.2
         desvio_padrao_perfuracao_B = 0.3
         desvio_padrao_polimento_B = 1
-        desvio_padrao_envernizamento = 0.3
+        desvio_padrao_envernizamento = 0.3"""
 
         # Seeds
-        self.seed_perfuracao_A = 10
-        self.seed_polimento_A = 20
-        self.seed_perfuracao_B = 30
-        self.seed_polimento_B = 40
-        self.seed_envernizamento = 50
+        seed_perfuracao_A = 10
+        seed_polimento_A = 20
+        seed_perfuracao_B = 30
+        seed_polimento_B = 40
+        seed_envernizamento = 50
 
         # Numero de clientes que vao ser atendidos
         self.n_clientes = 100
@@ -42,11 +46,11 @@ class Simulador:
         self.instant = 0  # valor inicial a 0
 
         # Servicos
-        self.client_queue_envernizamento = servico.Servico(self, 2, media_serv_envernizamento, desvio_padrao_envernizamento, None, self.seed_envernizamento)
-        self.client_queue_polimento_B = servico.Servico(self, 2, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento, self.seed_polimento_B)
-        self.client_queue_perfuracao_B = servico.Servico(self, 1, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B, self.seed_perfuracao_B)
-        self.client_queue_polimento_A = servico.Servico(self, 1, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento, self.seed_polimento_A)
-        self.client_queue_perfuracao_A = servico.Servico(self, 1, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A, self.seed_perfuracao_A)
+        self.client_queue_envernizamento = servico.Servico(self, numero_de_maquinas_envernizamento, media_serv_envernizamento, desvio_padrao_envernizamento, None, seed_envernizamento)
+        self.client_queue_polimento_B = servico.Servico(self, numero_de_maquinas_polimento_B, media_serv_polimento_B, desvio_padrao_polimento_B, self.client_queue_envernizamento, seed_polimento_B)
+        self.client_queue_perfuracao_B = servico.Servico(self, numero_de_maquinas_perfuracao_B, media_serv_perfuracao_B, desvio_padrao_perfuracao_B, self.client_queue_polimento_B, seed_perfuracao_B)
+        self.client_queue_polimento_A = servico.Servico(self, numero_de_maquinas_polimento_A, media_serv_polimento_A, desvio_padrao_polimento_A, self.client_queue_envernizamento, seed_polimento_A)
+        self.client_queue_perfuracao_A = servico.Servico(self, numero_de_maquinas_perfuracao_A, media_serv_perfuracao_A, desvio_padrao_perfuracao_A, self.client_queue_polimento_A, seed_perfuracao_A)
 
         # Lista de eventos - onde ficam registados todos os eventos que vao ocorrer na simulacao
         self.event_list = lista.Lista(self)
@@ -95,7 +99,7 @@ class Simulador:
         print("\n\n------------FINAL RESULTS - ENVERNIZAMENTO---------------\n\n")
         self.client_queue_envernizamento.relat()
 
-
+"""
 if __name__ == '__main__':
     s = Simulador()
-    s.executa()
+    s.executa()"""
