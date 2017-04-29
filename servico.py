@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import eventos
+import cliente
+import simulador
 from aleatorio import Aleatorio
+
 
 # Classe que representa um servico com uma fila de espera associada
 class Servico:
