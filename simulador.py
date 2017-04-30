@@ -3,7 +3,7 @@
 import servico
 import lista
 import eventos
-import int_grafica
+import tkinter as tk
 
 # TODO -> VERIFICAR QUANDO USAR DISTRIBUICAO NORMAL OU DISTRIBUICAO EXPONENCIAL NEGATIVA
 
@@ -98,8 +98,19 @@ class Simulador:
         self.client_queue_polimento_B.relat()
         print("\n\n------------FINAL RESULTS - ENVERNIZAMENTO---------------\n\n")
         self.client_queue_envernizamento.relat()
+"""
+    def relat2(self):
+        relat = tk.Tk()
+        app = tk.Frame(relat)
+        self.client_queue_perfuracao_A.relat(app)
+        self.client_queue_perfuracao_B.relat(app)
+        self.client_queue_polimento_A.relat(app)
+        self.client_queue_polimento_B.relat(app)
+        self.client_queue_envernizamento.relat(app)
 
+"""
 """
 if __name__ == '__main__':
     s = Simulador()
-    s.executa()"""
+    s.executa()
+"""

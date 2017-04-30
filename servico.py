@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import eventos
-import cliente
-import simulador
+import tkinter as tk
 from aleatorio import Aleatorio
 
 
@@ -71,6 +70,10 @@ class Servico:
         # Tempo medio de atendimento no servico
         utilizacao_serv = (self.soma_temp_serv / self.simulator.instant) / self.numero_de_maquinas
 
+        # texto = str(temp_med_fila)
+
+        # label = tk.Label(app, text = texto)
+        # label.pack()
         # Apresenta resultados
         print("Tempo medio de espera", temp_med_fila)
         print("Comp. medio da fila", comp_med_fila)
