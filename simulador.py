@@ -3,7 +3,7 @@
 import servico
 import lista
 import eventos
-import int_grafica
+import tkinter as tk
 
 
 class Simulador:

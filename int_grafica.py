@@ -226,23 +226,27 @@ class MenuSimulator(tk.Frame):
 
         # Media Serviço
         label_mediaEnv = tk.Label(self, text="Média de serviço Envernizamento: ", font=FONT)
+
         env_mediaDef = tk.StringVar()
         env_media = tk.Entry(self, validate="key", validatecommand=vcmd, textvariable=env_mediaDef)
+
         label_mediaEnv.pack()
         env_media.pack()
         env_media.focus_set()
 
+
         button1 = tk.Button(self, text="SIMULAR", command=lambda: callback(self), width=15, font=FONT)
         button1.pack()
 
+        button2 = tk.Button(self, text="BACK", command=lambda: controller.show_frame(MenuStart), width=15, font=FONT, height=1)
+        button2.pack()
+        
         button3 = tk.Button(self, text="CENARIO INICIAL", command=lambda: default(), width=15, font=FONT, height=1)
         button3.pack()
 
-        button2 = tk.Button(self, text="BACK", command=lambda: controller.show_frame(MenuStart), width=15, font=FONT, height=1)
-        button2.pack()
 
-        def callback(a):
-            if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_atendA.get() != '' and pol_mediaA.get() != '' and pol_atendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
+        def callback():
+            if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_attendA.get() != '' and pol_mediaA.get() != '' and pol_attendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
                 s = simulador.Simulador(int(temp_sim.get()), float(chegA.get()), float(chegB.get()), float(env_media.get()), float(env_desvio.get()),
                         int(env_atend.get()), float(pol_mediaB.get()), float(pol_desvioB.get()), int(pol_atendB.get()), float(perf_mediaB.get()),
                         float(perf_desvioB.get()), int(perf_atendB.get()), float(pol_mediaA.get()), float(pol_desvioA.get()), int(pol_atendA.get()),
