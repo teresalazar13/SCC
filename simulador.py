@@ -5,7 +5,6 @@ import lista
 import eventos
 import int_grafica
 
-# TODO -> VERIFICAR QUANDO USAR DISTRIBUICAO NORMAL OU DISTRIBUICAO EXPONENCIAL NEGATIVA
 
 class Simulador:
 
@@ -87,3 +86,7 @@ class Simulador:
         string += "\n\n------------FINAL RESULTS - ENVERNIZAMENTO---------------\n\n"
         string += self.client_queue_envernizamento.relat()
         return string
+
+
+if __name__ == '__main__':
+    int_grafica.MenuSimulator.start_simulation()

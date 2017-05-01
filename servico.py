@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import eventos
-import cliente
-import simulador
 from aleatorio import Aleatorio
 
 
