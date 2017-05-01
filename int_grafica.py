@@ -39,7 +39,7 @@ class MenuStart(tk.Frame):
         label = tk.Label(self, text="Simulador SCC - Fábrica", font=FONT)
         label.pack(pady=10, padx=10)
 
-        button = tk.Button(self, text="START",command=lambda: controller.show_frame(MenuSimulator), font=FONT, width=20)
+        button = tk.Button(self, text="START", command=lambda: controller.show_frame(MenuSimulator), font=FONT, width=20)
         button.pack()
 
         button2 = tk.Button(self, text="SAIR", command=lambda: quit(), font=FONT, width=20)
@@ -47,7 +47,6 @@ class MenuStart(tk.Frame):
 
 
 class MenuSimulator(tk.Frame):
-
     def validate(self, action, index, value_if_allowed, prior_value, text, validation_type, trigger_type, widget_name):
         if value_if_allowed == '':
             return True
@@ -69,7 +68,8 @@ class MenuSimulator(tk.Frame):
 
         # Tempo de simulação
         label_sim = tk.Label(self, text="Tempo de simulação: ", font=FONT)
-        temp_sim = tk.Entry(self, validate="key", validatecommand=vcmd)
+        temp_simDef = tk.StringVar()
+        temp_sim = tk.Entry(self, validate="key", validatecommand=vcmd, textvariable=temp_simDef)
         label_sim.pack()
         temp_sim.pack()
         temp_sim.focus_set()
@@ -79,15 +79,17 @@ class MenuSimulator(tk.Frame):
         labem_temp = tk.Entry(self, validate="key", validatecommand=vcmd)
 
         # Média de Chegadas A
-        label_chegA = tk.Label(self, text = "Média de chegadas A: ", font=FONT)
-        chegA = tk.Entry(self, validate="key")
+        label_chegA = tk.Label(self, text="Média de chegadas A: ", font=FONT)
+        chegADef = tk.StringVar()
+        chegA = tk.Entry(self, validate="key", textvariable=chegADef)
         label_chegA.pack()
         chegA.pack()
         chegA.focus_set()
 
         # Média de Chegadas B
         label_chegB = tk.Label(self, text="Média de chegadas B: ", font=FONT)
-        chegB = tk.Entry(self, validate="key")
+        chegBDef = tk.StringVar()
+        chegB = tk.Entry(self, validate="key", textvariable=chegBDef)
         label_chegB.pack()
         chegB.pack()
         chegB.focus_set()
@@ -95,42 +97,48 @@ class MenuSimulator(tk.Frame):
         # Perfuração
         # Nº Atendedores A
         label_atendPerfA = tk.Label(self, text = "Nº Atendedores Perfuração A: ", font=FONT)
-        perf_atendA = tk.Entry(self, validate="key")
+        perf_atendADef = tk.StringVar()
+        perf_atendA = tk.Entry(self, validate="key", textvariable=perf_atendADef)
         label_atendPerfA.pack()
         perf_atendA.pack()
         perf_atendA.focus_set()
 
         # Desvio Padrão A
         label_desvioPerfA = tk.Label(self, text="Desvio padrão Perfuração A:", font=FONT)
-        perf_desvioA = tk.Entry(self, validate="key")
+        perf_desvioADef = tk.StringVar()
+        perf_desvioA = tk.Entry(self, validate="key", textvariable=perf_desvioADef)
         label_desvioPerfA.pack()
         perf_desvioA.pack()
         perf_desvioA.focus_set()
 
         # Media serviço A
         label_mediaPerfA = tk.Label(self, text="Media de serviço Perfuração A: ", font=FONT)
-        perf_mediaA = tk.Entry(self, validate="key")
+        perf_mediaADef = tk.StringVar()
+        perf_mediaA = tk.Entry(self, validate="key", textvariable=perf_mediaADef)
         label_mediaPerfA.pack()
         perf_mediaA.pack()
         perf_mediaA.focus_set()
 
         # NºAtendedores B
         label_atendPerfB = tk.Label(self, text="Nº Atendedores Perfuração B: ", font=FONT)
-        perf_atendB = tk.Entry(self, validate="key")
+        perf_atendBDef = tk.StringVar()
+        perf_atendB = tk.Entry(self, validate="key", textvariable=perf_atendBDef)
         label_atendPerfB.pack()
         perf_atendB.pack()
         perf_atendB.focus_set()
 
         # Desvio Padrão B
         label_desvioPerfB = tk.Label(self, text="Desvio padrão Perfuração B:", font=FONT)
-        perf_desvioB = tk.Entry(self, validate="key")
+        perf_desvioBDef = tk.StringVar()
+        perf_desvioB = tk.Entry(self, validate="key", textvariable=perf_desvioBDef)
         label_desvioPerfB.pack()
         perf_desvioB.pack()
         perf_desvioB.focus_set()
 
         # Media serviço B
         label_mediaPerfB = tk.Label(self, text="Media de serviço Perfuração B: ", font=FONT)
-        perf_mediaB = tk.Entry(self, validate="key")
+        perf_mediaBDef = tk.StringVar()
+        perf_mediaB = tk.Entry(self, validate="key", textvariable=perf_mediaBDef)
         label_mediaPerfB.pack()
         perf_mediaB.pack()
         perf_mediaB.focus_set()
@@ -138,42 +146,48 @@ class MenuSimulator(tk.Frame):
         # Polimento
         # Nº Atendores A
         label_atendPolA = tk.Label(self, text ="Nº Atendedores Polimento A: ", font=FONT)
-        pol_attendA = tk.Entry(self, validate="key")
+        pol_atendADef = tk.StringVar()
+        pol_atendA = tk.Entry(self, validate="key", textvariable=pol_atendADef)
         label_atendPolA.pack()
-        pol_attendA.pack()
-        pol_attendA.focus_set()
+        pol_atendA.pack()
+        pol_atendA.focus_set()
 
         # Desvio Padrão A
         label_desvioPolA = tk.Label(self, text="Desvio padrão Polimento A:", font=FONT)
-        pol_desvioA = tk.Entry(self, validate="key")
+        pol_desvioADef = tk.StringVar()
+        pol_desvioA = tk.Entry(self, validate="key", textvariable=pol_desvioADef)
         label_desvioPolA.pack()
         pol_desvioA.pack()
         pol_desvioA.focus_set()
 
         # Media serviço A
         label_mediaPolA = tk.Label(self, text="Media de serviço Polimento A: ", font=FONT)
-        pol_mediaA = tk.Entry(self, validate="key")
+        pol_mediaADef = tk.StringVar()
+        pol_mediaA = tk.Entry(self, validate="key", textvariable=pol_mediaADef)
         label_mediaPolA.pack()
         pol_mediaA.pack()
         pol_mediaA.focus_set()
 
         # Nº Atendores B
         label_mediaPolB = tk.Label(self, text="Nº atendedores Polimento B: ", font=FONT)
-        pol_attendB = tk.Entry(self, validate="key")
+        pol_atendBDef = tk.StringVar()
+        pol_atendB = tk.Entry(self, validate="key", textvariable=pol_atendBDef)
         label_mediaPolB.pack()
-        pol_attendB.pack()
-        pol_attendB.focus_set()
+        pol_atendB.pack()
+        pol_atendB.focus_set()
 
         # Desvio Padrão B
         label_desvioPolB = tk.Label(self, text="Desvio padrão Polimento B:", font=FONT)
-        pol_desvioB = tk.Entry(self, validate="key")
+        pol_desvioBDef = tk.StringVar()
+        pol_desvioB = tk.Entry(self, validate="key", textvariable=pol_desvioBDef)
         label_desvioPolB.pack()
         pol_desvioB.pack()
         pol_desvioB.focus_set()
 
         # Media serviço B
         label_mediaPolB = tk.Label(self, text="Media de serviço Polimento B: ", font=FONT)
-        pol_mediaB = tk.Entry(self, validate="key")
+        pol_mediaBDef = tk.StringVar()
+        pol_mediaB = tk.Entry(self, validate="key", textvariable=pol_mediaBDef)
         label_mediaPolB.pack()
         pol_mediaB.pack()
         pol_mediaB.focus_set()
@@ -181,39 +195,67 @@ class MenuSimulator(tk.Frame):
         # Envernizamento
         # Nº Atendedores
         label_attendEnv = tk.Label(self, text="Nº Atendores Envernizamento: ", font=FONT)
-        env_atend = tk.Entry(self, validate="key")
+        env_atendDef = tk.StringVar()
+        env_atend = tk.Entry(self, validate="key", textvariable=env_atendDef)
         label_attendEnv.pack()
         env_atend.pack()
         env_atend.focus_set()
 
         # Desvio Padrão
         label_desvioEnv = tk.Label(self, text="Desvio padrão Envernizamento: ", font=FONT)
-        env_desvio = tk.Entry(self, validate="key")
+        env_desvioDef = tk.StringVar()
+        env_desvio = tk.Entry(self, validate="key", textvariable=env_desvioDef)
         label_desvioEnv.pack()
         env_desvio.pack()
         env_desvio.focus_set()
 
         # Media Serviço
         label_mediaEnv = tk.Label(self, text="Média de serviço Envernizamento: ", font=FONT)
-        env_media = tk.Entry(self, validate="key")
+        env_mediaDef = tk.StringVar()
+        env_media = tk.Entry(self, validate="key", textvariable=env_mediaDef)
         label_mediaEnv.pack()
         env_media.pack()
         env_media.focus_set()
 
-        button1 = tk.Button(self, text="SIMULAR", command= lambda: callback(), width=10)
+        button1 = tk.Button(self, text="SIMULAR", command=lambda: callback(self), width=15)
         button1.pack()
 
-        button2 = tk.Button(self, text="MENU INICIAL", command=lambda: controller.show_frame(MenuStart), width = 10)
+        button2 = tk.Button(self, text="MENU INICIAL", command=lambda: controller.show_frame(MenuStart), width=15)
         button2.pack()
 
-        def callback():
-            if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_attendA.get() != '' and pol_mediaA.get() != '' and pol_attendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
+        button3 = tk.Button(self, text="CENARIO INICIAL", command=lambda: default(), width=15)
+        button3.pack()
+
+        def callback(a):
+            if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_atendA.get() != '' and pol_mediaA.get() != '' and pol_atendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
                 s = simulador.Simulador(int(temp_sim.get()), float(chegA.get()), float(chegB.get()), float(env_media.get()), float(env_desvio.get()),
-                        int(env_atend.get()), float(pol_mediaB.get()), float(pol_desvioB.get()), int(pol_attendB.get()), float(perf_mediaB.get()),
-                        float(perf_desvioB.get()), int(perf_atendB.get()), float(pol_mediaA.get()), float(pol_desvioA.get()), int(pol_attendA.get()),
+                        int(env_atend.get()), float(pol_mediaB.get()), float(pol_desvioB.get()), int(pol_atendB.get()), float(perf_mediaB.get()),
+                        float(perf_desvioB.get()), int(perf_atendB.get()), float(pol_mediaA.get()), float(pol_desvioA.get()), int(pol_atendA.get()),
                         float(perf_mediaA.get()), float(perf_desvioA.get()), int(perf_atendA.get()))
-                s.executa()
+                string = s.executa()
+                print(string)
                 self.destroy()
+
+        def default():
+            temp_simDef.set("9600")
+            chegADef.set("5")
+            chegBDef.set("1.33")
+            perf_mediaADef.set("2")
+            perf_desvioADef.set("0.7")
+            perf_atendADef.set("1")
+            pol_mediaADef.set("4")
+            pol_desvioADef.set("1.2")
+            pol_atendADef.set("1")
+            perf_mediaBDef.set("0.75")
+            perf_desvioBDef.set("0.3")
+            perf_atendBDef.set("1")
+            pol_mediaBDef.set("3")
+            pol_desvioBDef.set("1")
+            pol_atendBDef.set("2")
+            env_mediaDef.set("1.4")
+            env_desvioDef.set("0.3")
+            env_atendDef.set("2")
+
 
 if __name__ == '__main__':
     app = Menu()
