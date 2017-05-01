@@ -5,7 +5,6 @@ import lista
 import eventos
 import tkinter as tk
 
-# TODO -> VERIFICAR QUANDO USAR DISTRIBUICAO NORMAL OU DISTRIBUICAO EXPONENCIAL NEGATIVA
 
 class Simulador:
 
@@ -15,22 +14,9 @@ class Simulador:
                  media_serv_perfuracao_B, desvio_padrao_perfuracao_B, numero_de_maquinas_perfuracao_B,
                  media_serv_polimento_A, desvio_padrao_polimento_A, numero_de_maquinas_polimento_A,
                  media_serv_perfuracao_A, desvio_padrao_perfuracao_A, numero_de_maquinas_perfuracao_A):
+
         # Tempo de execucao
         self.execution_time = execution_time
-        """
-        # Medias das distribuicoes de chegadas e de atendimento no servico
-        media_serv_perfuracao_A = 2
-        media_serv_polimento_A = 4
-        media_serv_perfuracao_B = 0.75
-        media_serv_polimento_B = 3
-        media_serv_envernizamento = 1.4
-
-        # Desvios-padrao
-        desvio_padrao_perfuracao_A = 0.7
-        desvio_padrao_polimento_A = 1.2
-        desvio_padrao_perfuracao_B = 0.3
-        desvio_padrao_polimento_B = 1
-        desvio_padrao_envernizamento = 0.3"""
 
         # Seeds
         seed_perfuracao_A = 10
@@ -71,7 +57,7 @@ class Simulador:
             self.instant = event.instant  # Actualiza relogio de simulacao
             self.act_stats()  # Actualiza valores estatisticos
             event.executa()  # Executa eventos
-        self.relat()  # Apresenta resultados de simulacao finais
+        return self.relat()  # Apresenta resultados de simulacao finais
 
     # Metodo que actualiza os valores estatisticos do simulador
     def act_stats(self):
@@ -88,29 +74,19 @@ class Simulador:
 
     # Metodo que apresenta os resultados de simulacao finais
     def relat(self):
-        print("\n\n------------FINAL RESULTS - PERFURACAO A---------------\n\n")
-        self.client_queue_perfuracao_A.relat()
-        print("\n\n------------FINAL RESULTS - POLIMENTO A---------------\n\n")
-        self.client_queue_polimento_A.relat()
-        print("\n\n------------FINAL RESULTS - PERFURACAO B---------------\n\n")
-        self.client_queue_perfuracao_B.relat()
-        print("\n\n------------FINAL RESULTS - POLIMENTO B---------------\n\n")
-        self.client_queue_polimento_B.relat()
-        print("\n\n------------FINAL RESULTS - ENVERNIZAMENTO---------------\n\n")
-        self.client_queue_envernizamento.relat()
-"""
-    def relat2(self):
-        relat = tk.Tk()
-        app = tk.Frame(relat)
-        self.client_queue_perfuracao_A.relat(app)
-        self.client_queue_perfuracao_B.relat(app)
-        self.client_queue_polimento_A.relat(app)
-        self.client_queue_polimento_B.relat(app)
-        self.client_queue_envernizamento.relat(app)
+        string = ""
+        string += "\n\n------------FINAL RESULTS - PERFURACAO A---------------\n\n"
+        string += self.client_queue_perfuracao_A.relat()
+        string += "\n\n------------FINAL RESULTS - POLIMENTO A---------------\n\n"
+        string += self.client_queue_polimento_A.relat()
+        string += "\n\n------------FINAL RESULTS - PERFURACAO B---------------\n\n"
+        string += self.client_queue_perfuracao_B.relat()
+        string += "\n\n------------FINAL RESULTS - POLIMENTO B---------------\n\n"
+        string += self.client_queue_polimento_B.relat()
+        string += "\n\n------------FINAL RESULTS - ENVERNIZAMENTO---------------\n\n"
+        string += self.client_queue_envernizamento.relat()
+        return string
 
-"""
-"""
+
 if __name__ == '__main__':
-    s = Simulador()
-    s.executa()
-"""
+    int_grafica.MenuSimulator.start_simulation()
