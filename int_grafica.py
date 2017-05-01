@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import END
 import simulador
+from time import sleep
 
 
 FONT = ("Verdana", 7)
@@ -28,14 +30,22 @@ class Menu(tk.Tk):
 
         self.show_frame(MenuStart)
 
+        frame = Results(wdw, self)
+        self.frames[Results] = frame
+        frame.grid(row=0, column=1, sticky="nsew")
+        # frame.grid_remove()
+
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
 
+    def get_page(self, page_class):
+        return self.frames[page_class]
+
 
 class MenuStart(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, width=200000, height=100, background="bisque")
+        tk.Frame.__init__(self, parent, width=2000, height=100)
         label = tk.Label(self, text="Simulador SCC - Fábrica", font=FONT)
         label.pack(pady=10, padx=10)
 
@@ -44,6 +54,17 @@ class MenuStart(tk.Frame):
 
         button2 = tk.Button(self, text="SAIR", command=lambda: quit(), font=FONT, width=20)
         button2.pack(pady=20, padx=20)
+
+
+class Results(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
+    def update_results(self, results_string):
+        root = tk.Tk()
+        text = tk.Text(root, height=100, width=100)
+        text.pack()
+        text.insert(END, results_string)
 
 
 class MenuSimulator(tk.Frame):
@@ -61,6 +82,7 @@ class MenuSimulator(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller
         label = tk.Label(self, text="Introduzir valores: ", font=FONT)
         label.pack()
 
@@ -217,14 +239,17 @@ class MenuSimulator(tk.Frame):
         env_media.pack()
         env_media.focus_set()
 
-        button1 = tk.Button(self, text="SIMULAR", command=lambda: callback(self), width=15)
+        button1 = tk.Button(self, text="SIMULAR", command=lambda: callback(self), width=15, font=FONT)
         button1.pack()
 
-        button2 = tk.Button(self, text="MENU INICIAL", command=lambda: controller.show_frame(MenuStart), width=15)
+        button2 = tk.Button(self, text="MENU INICIAL", command=lambda: controller.show_frame(MenuStart), width=15, font=FONT, height=1)
         button2.pack()
 
-        button3 = tk.Button(self, text="CENARIO INICIAL", command=lambda: default(), width=15)
+        button3 = tk.Button(self, text="CENARIO INICIAL", command=lambda: default(), width=15, font=FONT, height=1)
         button3.pack()
+
+        button4 = tk.Button(self, text="RESULTADOS", command=lambda: controller.show_frame(Results), width=15, font=FONT, height=1)
+        button4.pack()
 
         def callback(a):
             if env_media.get() != '' and env_desvio.get() != '' and env_atend.get() != '' and pol_mediaB.get() != '' and pol_desvioB.get() != '' and pol_atendA.get() != '' and pol_mediaA.get() != '' and pol_atendB.get() != '' and pol_mediaB.get() != '' and perf_atendA.get() != '' and perf_mediaA.get() != '' and perf_desvioA.get() != '' and perf_atendB.get() != '' and perf_mediaB.get() != '' and perf_desvioB.get() != '' and temp_sim.get() != '' and chegA.get() != '' and chegB.get() != '':
@@ -232,9 +257,10 @@ class MenuSimulator(tk.Frame):
                         int(env_atend.get()), float(pol_mediaB.get()), float(pol_desvioB.get()), int(pol_atendB.get()), float(perf_mediaB.get()),
                         float(perf_desvioB.get()), int(perf_atendB.get()), float(pol_mediaA.get()), float(pol_desvioA.get()), int(pol_atendA.get()),
                         float(perf_mediaA.get()), float(perf_desvioA.get()), int(perf_atendA.get()))
-                string = s.executa()
-                print(string)
-                self.destroy()
+                res = s.executa()
+                self.controller.get_page(Results).update_results(res)
+                # controller.update_idletasks()
+                # self.destroy()
 
         def default():
             temp_simDef.set("9600")
